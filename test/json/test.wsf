@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package>
+	<job>
+		<script language = "JavaScript" src = "../../lib/json/JSON-js/json2.js"></script>
+		<script language = "JavaScript" src = "test.js"></script>
+	</job>
+</package>
