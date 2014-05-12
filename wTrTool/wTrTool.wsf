@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<package>
+  <job>
+    <runtime>
+      <named
+        name="input"
+        helpstring="入力ファイル名"
+        type="string"
+        required="true"
+      />
+      <named
+        name="output"
+        helpstring="出力ファイル名"
+        type="string"
+        required="true"
+      />
+      <named
+        name="format"
+        helpstring="整形パターン記述ファイル名"
+        type="string"
+        required="true"
+      />
+      <named
+        name="pattern"
+        helpstring="整形パターン名"
+        type="string"
+        required="true"
+      />
+      <named
+        name="endian"
+        helpstring="+ リトルエンディアン(デフォルト), - ビッグエンディアン "
+        type="Boolean"
+      />
+    </runtime>
+    <script language = "JScript" src = "wsh_force_cscript.js"></script>
+    <script language = "JScript" src = "../lib/json/JSON-js/json2.js"></script>
+    <script language = "JScript" src = "wTrTool.js"></script>
+  </job>
+</package>
