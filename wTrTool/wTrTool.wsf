@@ -33,7 +33,7 @@
         type="Boolean"
       />
     </runtime>
-    <script language = "JScript" src = "wsh_force_cscript.js"></script>
+    <script language = "JScript" src = "../lib/wsh_force_cscript/wsh_force_cscript.js"></script>
     <script language = "JScript" src = "../lib/json/JSON-js/json2.js"></script>
     <script language = "JScript" src = "wTrTool.js"></script>
   </job>
