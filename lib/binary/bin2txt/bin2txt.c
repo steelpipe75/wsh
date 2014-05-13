@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 	FILE *out_file;
 	
 	char ch;
+	int count;
 		
 	if(argc != 3){
 		ShowUsage();
@@ -21,8 +22,17 @@ int main(int argc, char *argv[])
 	in_file = wrap_fopen(argv[1],"rb");
 	out_file = wrap_fopen(argv[2],"w");
 	
+	count = 0;
+	
 	while(fread(&ch, sizeof(char), 1, in_file) != 0){
+		count++;
 		fprintf(out_file, "%02X", ch);
+		if(count < 16){
+			fprintf(out_file, " ");
+		}else{
+			fprintf(out_file, "\n");
+			count = 0;
+		}
 	}
 	
 	fclose(in_file);
