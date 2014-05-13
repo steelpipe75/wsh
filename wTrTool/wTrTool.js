@@ -6,14 +6,14 @@ var Option = new Object;
   var objArgs = WScript.Arguments;
 
   optGet = (function(objArgs, key , default_value){
-    if(objArgs.Named.Exists(key)){
+    if(objArgs.Named.Exists(key) && (objArgs.Named.Item(key) !== undefined)){
       return objArgs.Named.Item(key);
     }else{
       return default_value;
     }
   });
 
-  var opt = [
+  var options = [
                 /* key,     default_value */
                 ["input",   "input.dat"]
               , ["output",  "output.csv"]
@@ -22,8 +22,8 @@ var Option = new Object;
               , ["endian",  true]
             ];
 
-  for(var i = 0; i < opt.length; i++){
-    Option[opt[i][0]] = optGet(objArgs, opt[i][0], opt[i][1]);
+  for(var i = 0; i < options.length; i++){
+    Option[options[i][0]] = optGet(objArgs, options[i][0], options[i][1]);
   }
 
   WScript.Echo( "Option = " + JSON.stringify(Option) );
