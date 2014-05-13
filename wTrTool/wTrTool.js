@@ -29,3 +29,14 @@ var Option = new Object;
   WScript.Echo( "Option = " + JSON.stringify(Option) );
 
 })();
+
+(function(){
+
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
+  var stream = objFS.OpenTextFile(Option.input, 1, false, -2);
+  var text = stream.ReadAll();
+
+  WScript.Echo( text );
+
+})();
+
