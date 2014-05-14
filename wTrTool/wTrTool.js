@@ -26,15 +26,28 @@ var Option = new Object;
     Option[options[i][0]] = optGet(objArgs, options[i][0], options[i][1]);
   }
 
-  WScript.Echo( "Option = " + JSON.stringify(Option) );
+//  WScript.Echo( "Option = " + JSON.stringify(Option) );
 
 })();
 
 (function(){
 
   var objFS = new ActiveXObject("Scripting.FileSystemObject");
-  var stream = objFS.OpenTextFile(Option.input, 1, false, -2);
+  var tname = objFS.GetTempName();
+
+  var WshShell = new ActiveXObject("WScript.Shell");
+
+  var bin2txt_path = "..\\lib\\binary\\bin2txt\\bin2txt.exe"; //@TODO
+
+  var command = "cmd.exe /v:on /s /c \"" + bin2txt_path + " " +
+                 Option.input + " "+ tname + " & exit /b !ERRORLEVEL!\"";
+
+  WshShell.Run(command, 8, true);
+
+  var stream = objFS.OpenTextFile(tname, 1, false, -2);
   var text = stream.ReadAll();
+  stream.Close();
+  objFS.DeleteFile(tname);
 
   WScript.Echo( text );
 
