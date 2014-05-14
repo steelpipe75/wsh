@@ -30,7 +30,7 @@ var Option = new Object;
 
 })();
 
-(function(){
+a = (function(filename){
 
   var objFS = new ActiveXObject("Scripting.FileSystemObject");
   var tname = objFS.GetTempName();
@@ -38,18 +38,31 @@ var Option = new Object;
   var WshShell = new ActiveXObject("WScript.Shell");
 
   var command = "cmd.exe /v:on /s /c \"" + bin2txt_exe_path + " " +
-                 Option.input + " "+ tname + " & exit /b !ERRORLEVEL!\"";
+                 filename + " "+ tname + " & exit /b !ERRORLEVEL!\"";
 
   WshShell.Run(command, 8, true);
 
   var stream = objFS.OpenTextFile(tname, 1, false, -2);
-  var binary = stream.ReadAll();
+  var binary_txt = stream.ReadAll();
   stream.Close();
   objFS.DeleteFile(tname);
 
-  var binary_array = _.without(binary.split("\r\n").join(" ").split(" "), "");
+  var binary_array = _.without(binary_txt.split("\r\n").join(" ").split(" "), "");
 
-  WScript.Echo( JSON.stringify(binary_array) );
+  var binary = [];
+  var item;
+  var max = binary_array.length;
+  for(var i = 0; i < max; i++){
+    item = "0x" + binary_array[i];
+//    WScript.Echo( item + " = " + Number(item) );
+    binary.push( Number(item) );
+  }
 
-})();
+//  WScript.Echo( JSON.stringify(binary_array) );
+//  WScript.Echo( JSON.stringify(binary) );
 
+  return binary;
+
+})(Option.input);
+
+WScript.Echo( JSON.stringify(a) );
