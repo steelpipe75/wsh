@@ -33,8 +33,13 @@
         type="Boolean"
       />
     </runtime>
+    <!-- VVV ライブラリ VVV -->
     <script language = "JScript" src = "../lib/wsh_force_cscript/wsh_force_cscript.js"></script>
     <script language = "JScript" src = "../lib/json/JSON-js/json2.js"></script>
+    <script language = "JScript">var bin2txt_exe_path = "..\\lib\\binary\\bin2txt\\bin2txt.exe";</script>
+    <script language = "JScript" src = "../lib/underscore/1.5.0/underscore-min.js"></script>
+    <!-- AAA ライブラリ AAA -->
+
     <script language = "JScript" src = "wTrTool.js"></script>
   </job>
 </package>

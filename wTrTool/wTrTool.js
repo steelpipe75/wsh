@@ -37,19 +37,19 @@ var Option = new Object;
 
   var WshShell = new ActiveXObject("WScript.Shell");
 
-  var bin2txt_path = "..\\lib\\binary\\bin2txt\\bin2txt.exe"; //@TODO
-
-  var command = "cmd.exe /v:on /s /c \"" + bin2txt_path + " " +
+  var command = "cmd.exe /v:on /s /c \"" + bin2txt_exe_path + " " +
                  Option.input + " "+ tname + " & exit /b !ERRORLEVEL!\"";
 
   WshShell.Run(command, 8, true);
 
   var stream = objFS.OpenTextFile(tname, 1, false, -2);
-  var text = stream.ReadAll();
+  var binary = stream.ReadAll();
   stream.Close();
   objFS.DeleteFile(tname);
 
-  WScript.Echo( text );
+  var binary_array = _.without(binary.split("\r\n").join(" ").split(" "), "");
+
+  WScript.Echo( JSON.stringify(binary_array) );
 
 })();
 
