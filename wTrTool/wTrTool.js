@@ -30,39 +30,15 @@ var Option = new Object;
 
 })();
 
-a = (function(filename){
+num = []
 
-  var objFS = new ActiveXObject("Scripting.FileSystemObject");
-  var tname = objFS.GetTempName();
+for(var i = 0; i < 256; i++){
+  num.push(i);
+}
 
-  var WshShell = new ActiveXObject("WScript.Shell");
+WSH_BINARY.WritefileFromArray(Option.output, num);
 
-  var command = "cmd.exe /v:on /s /c \"" + bin2txt_exe_path + " " +
-                 filename + " "+ tname + " & exit /b !ERRORLEVEL!\"";
 
-  WshShell.Run(command, 8, true);
+// a = WSH_BINARY.Readfile2Array(Option.input);
 
-  var stream = objFS.OpenTextFile(tname, 1, false, -2);
-  var binary_txt = stream.ReadAll();
-  stream.Close();
-  objFS.DeleteFile(tname);
-
-  var binary_array = _.without(binary_txt.split("\r\n").join(" ").split(" "), "");
-
-  var binary = [];
-  var item;
-  var max = binary_array.length;
-  for(var i = 0; i < max; i++){
-    item = "0x" + binary_array[i];
-//    WScript.Echo( item + " = " + Number(item) );
-    binary.push( Number(item) );
-  }
-
-//  WScript.Echo( JSON.stringify(binary_array) );
-//  WScript.Echo( JSON.stringify(binary) );
-
-  return binary;
-
-})(Option.input);
-
-WScript.Echo( JSON.stringify(a) );
+// WScript.Echo( JSON.stringify(a) );
