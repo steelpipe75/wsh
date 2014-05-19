@@ -30,15 +30,20 @@ var Option = new Object;
 
 })();
 
-num = []
+(function(){
 
-for(var i = 0; i < 256; i++){
-  num.push(i);
-}
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
 
-WSH_BINARY.WritefileFromArray(Option.output, num);
+  var format_stream = objFS.OpenTextFile(Option.format, 1, false, -2);
+  var format_txt = format_stream.ReadAll();
 
+  format = JSON.parse(format_txt);
 
-// a = WSH_BINARY.Readfile2Array(Option.input);
+  WScript.Echo( JSON.stringify( format[0] ) );
 
-// WScript.Echo( JSON.stringify(a) );
+  var a = WSH_BINARY.Readfile2Array(Option.input);
+
+  WScript.Echo( JSON.stringify(a) );
+
+})();
+
