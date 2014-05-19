@@ -11,5 +11,5 @@ end
 
 data = YAML.load_file(ARGV[0])
 File.open(ARGV[1],'w'){ |f|
-  f.write data.to_json
+  f.write JSON.pretty_generate(data).encode("Shift_JIS")
 }
