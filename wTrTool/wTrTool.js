@@ -1,3 +1,24 @@
+var FORMAT_TYPE = [
+   { "type" : "UINT8"   , "length" : 1 }
+  ,{ "type" : "UINT16"  , "length" : 2 }
+  ,{ "type" : "UINT32"  , "length" : 4 }
+  ,{ "type" : "SINT8"   , "length" : 1 }
+  ,{ "type" : "SINT16"  , "length" : 2 }
+  ,{ "type" : "SINT32"  , "length" : 4 }
+  ,{ "type" : "BIT8"    , "length" : 1 }
+  ,{ "type" : "BIT16"   , "length" : 2 }
+  ,{ "type" : "BIT32"   , "length" : 4 }
+  ,{ "type" : "OCT8"    , "length" : 1 }
+  ,{ "type" : "OCT16"   , "length" : 2 }
+  ,{ "type" : "OCT32"   , "length" : 4 }
+  ,{ "type" : "HEX8"    , "length" : 1 }
+  ,{ "type" : "HEX16"   , "length" : 2 }
+  ,{ "type" : "HEX32"   , "length" : 4 }
+  ,{ "type" : "DUMMY8"  , "length" : 1 }
+  ,{ "type" : "DUMMY16" , "length" : 2 }
+  ,{ "type" : "DUMMY32" , "length" : 4 }
+];
+
 var wTrTool = {};
 
 // command line argument
@@ -136,6 +157,8 @@ WScript.Echo( "=================================================================
 // output
 (function(){
   var top = [];
+  var binarys = wTrTool.binarys;
+
   (function make_header_str(header,format){
     for(var i = 0; i < format.length; i++){
       if("union" in format[i]){
@@ -149,5 +172,50 @@ WScript.Echo( "=================================================================
   })(top, wTrTool.format);
 
   WScript.Echo( JSON.stringify(top) );
+  WScript.Echo( "------------------------------------------------------------------------" );
+
+  while(binarys.length > 0){
+    var data = [];
+    
+    (function make_convert_str(str, tbl, format){
+      if("union" in format){
+        //@TODO
+        var union_tbl = tbl;
+        var min_tbl = tbl;
+        for(var j = 0; j < format.union.length; j++){
+          var temp_tbl = union_tbl;
+          make_convert_str(str, temp_tbl, format.union[j]);
+          if(min_tbl.length > temp_tbl.length){
+            min_tbl = temp_tbl;
+          }
+        }
+        tbl = min_tbl;
+      }else if("label" in format){
+        var flg = true;
+        for(var k = 0; k < FORMAT_TYPE.length; k++){
+          if(FORMAT_TYPE[k].type === format.type){
+            var d = [];
+            for(var l = 0; l < FORMAT_TYPE[k].length; l++){
+              d.push(tbl.shift());
+            }
+            
+            flg = false;
+            str.push(d);
+          }
+        }
+        if(flg){
+          WScript.Echo("Error : invalid type");
+          WScript.Quit(-1);
+        }
+      }else{
+        for(var i = 0; i < format.length; i++){
+          make_convert_str(str, tbl, format[i]);
+        }
+      }
+    })(data, binarys, wTrTool.format);
+    
+    WScript.Echo( JSON.stringify(data) );
+  }
+
 })();
 
