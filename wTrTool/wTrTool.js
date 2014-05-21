@@ -131,4 +131,23 @@ WScript.Echo( "=================================================================
 WScript.Echo( JSON.stringify(wTrTool.binarys) );
 WScript.Echo( "========================================================================" );
 WScript.Echo( JSON.stringify(wTrTool.format) );
+WScript.Echo( "========================================================================" );
+
+// output
+(function(){
+  var top = [];
+  (function make_header_str(header,format){
+    for(var i = 0; i < format.length; i++){
+      if("union" in format[i]){
+        make_header_str(header, format[i].union);
+      }else{
+        if(format[i].type.search("DUMMY") === -1){
+          header.push(format[i].label);
+        }
+      }
+    }
+  })(top, wTrTool.format);
+
+  WScript.Echo( JSON.stringify(top) );
+})();
 
