@@ -39,21 +39,21 @@ var wTrTool = {};
   var format_stream = objFS.OpenTextFile(wTrTool.option.format, 1, false, -2);
   var format_txt = format_stream.ReadAll();
   var formats = JSON.parse(format_txt);
-  var format = null;
+  var pattern = null;
 
   for(var i = 0; i < formats.length; i++){
     if(formats[i].patternname === wTrTool.option.pattern){
-      format = formats[i];
+      pattern = formats[i];
       break;
     }
   }
 
-  if(format === null){
+  if(pattern === null){
     WScript.Echo( "Error: pattern not found" );
     WScript.Quit(-1);
   }
 
-  wTrTool.format = format;
+  wTrTool.pattern = pattern;
 
 })();
 
@@ -65,7 +65,69 @@ var wTrTool = {};
 
 })();
 
-WScript.Echo( JSON.stringify(wTrTool.format) );
+function format_convert(format, pattern, prefix, suffix){
+  for(var i = 0; i < pattern.length; i++){
+    if("union" in pattern[i]){
+      // WScript.Echo( "union" );
+      var union_obj = {};
+      var tbl = [];
+      union_obj.label = pattern[i].label;
+      for(var k = 0; k < pattern[i].union.length; k++){
+        var union_prefix_top = "";
+        var union_prefix_bottom = "";
+        if(prefix === ""){
+          union_prefix_top = "";
+        }else{
+          union_prefix_top = prefix + ".";
+        }
+        union_prefix_bottom = pattern[i].label + "." + pattern[i].union[k].label + ".";
+        format_convert(tbl, pattern[i].union[k].format, union_prefix_top + union_prefix_bottom, suffix);
+      }
+      union_obj.union = tbl;
+      format.push(union_obj);
+    }else if("array" in pattern[i]){
+      // WScript.Echo( "array" );
+      for(var j = 0; j < pattern[i].array.num; j++){
+        var array_suffix = "[" + j + "]";
+        var array_prefix = "";
+        if(prefix === ""){
+          array_prefix = pattern[i].label;
+        }else{
+          array_prefix = prefix + suffix + "." + pattern[i].label;
+        }
+        format_convert(format, pattern[i].array.format, array_prefix, array_suffix);
+      }
+    }else{
+      // WScript.Echo( "member" );
+      var obj = {};
+      obj.type = pattern[i].type;
+      if(suffix === ""){
+        obj.label = prefix + pattern[i].label;
+      }else{
+        if(pattern[i].label === ""){
+          obj.label = prefix + suffix;
+        }else{
+          obj.label = prefix + suffix + "." + pattern[i].label;
+        }
+      }
+      format.push(obj);
+    }
+  }
+}
+
+(function(){
+  var format = [];
+  var prefix = "";
+  var suffix = "";
+
+  format_convert(format, wTrTool.pattern.format, prefix, suffix);
+
+  wTrTool.format = format;
+})();
+
+WScript.Echo( JSON.stringify(wTrTool.pattern) );
 WScript.Echo( "========================================================================" );
 WScript.Echo( JSON.stringify(wTrTool.binarys) );
+WScript.Echo( "========================================================================" );
+WScript.Echo( JSON.stringify(wTrTool.format) );
 
