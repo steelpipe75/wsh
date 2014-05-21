@@ -1,7 +1,8 @@
-var Option = new Object;
+var wTrTool = {};
 
 /* command line argument */
 (function(){
+  var opt = {};
 
   var objArgs = WScript.Arguments;
 
@@ -23,27 +24,48 @@ var Option = new Object;
             ];
 
   for(var i = 0; i < options.length; i++){
-    Option[options[i][0]] = optGet(objArgs, options[i][0], options[i][1]);
+    opt[options[i][0]] = optGet(objArgs, options[i][0], options[i][1]);
   }
 
-//  WScript.Echo( "Option = " + JSON.stringify(Option) );
+//  WScript.Echo( "opt = " + JSON.stringify(opt) );
 
+  wTrTool.option = opt;
 })();
 
 (function(){
 
   var objFS = new ActiveXObject("Scripting.FileSystemObject");
 
-  var format_stream = objFS.OpenTextFile(Option.format, 1, false, -2);
+  var format_stream = objFS.OpenTextFile(wTrTool.option.format, 1, false, -2);
   var format_txt = format_stream.ReadAll();
+  var formats = JSON.parse(format_txt);
+  var format = null;
 
-  format = JSON.parse(format_txt);
+  for(var i = 0; i < formats.length; i++){
+    if(formats[i].patternname === wTrTool.option.pattern){
+      format = formats[i];
+      break;
+    }
+  }
 
-  WScript.Echo( JSON.stringify( format[0] ) );
+  if(format === null){
+    WScript.Echo( "Error: pattern not found" );
+    WScript.Quit(-1);
+  }
 
-  var a = WSH_BINARY.Readfile2Array(Option.input);
-
-  WScript.Echo( JSON.stringify(a) );
+  wTrTool.format = format;
 
 })();
+
+(function(){
+
+  var a = WSH_BINARY.Readfile2Array(wTrTool.option.input);
+
+  wTrTool.binarys = a;
+
+})();
+
+WScript.Echo( JSON.stringify(wTrTool.format) );
+WScript.Echo( "========================================================================" );
+WScript.Echo( JSON.stringify(wTrTool.binarys) );
 
