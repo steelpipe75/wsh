@@ -90,9 +90,10 @@ var wTrTool = {};
       if("union" in pattern[i]){
         // WScript.Echo( "union" );
         var union_obj = {};
-        var tbl = [];
         union_obj.label = pattern[i].label;
+        union_obj.union = [];
         for(var k = 0; k < pattern[i].union.length; k++){
+          var tbl = [];
           var union_prefix_top = "";
           var union_prefix_bottom = "";
           if(prefix === ""){
@@ -102,8 +103,8 @@ var wTrTool = {};
           }
           union_prefix_bottom = pattern[i].label + "." + pattern[i].union[k].label + ".";
           format_convert(tbl, pattern[i].union[k].format, union_prefix_top + union_prefix_bottom, suffix);
+          union_obj.union.push( tbl );
         }
-        union_obj.union = tbl;
         format.push(union_obj);
       }else if("array" in pattern[i]){
         // WScript.Echo( "array" );
@@ -160,12 +161,21 @@ WScript.Echo( "=================================================================
   var binarys = wTrTool.binarys;
 
   (function make_header_str(header,format){
-    for(var i = 0; i < format.length; i++){
-      if("union" in format[i]){
-        make_header_str(header, format[i].union);
-      }else{
-        if(format[i].type.search("DUMMY") === -1){
-          header.push(format[i].label);
+    // WScript.Echo( JSON.stringify( format ) );
+    
+    if("type" in format){
+      if(format.type.search("DUMMY") === -1){
+        header.push(format.label);
+      }
+    }else{
+      for(var i = 0; i < format.length; i++){
+        if("union" in format[i]){
+          // WScript.Echo( "union" );
+          make_header_str(header, format[i].union);
+        }else{
+          for(var j = 0; j < format[i].length; j++){
+            make_header_str(header, format[i][j]);
+          }
         }
       }
     }
@@ -177,20 +187,20 @@ WScript.Echo( "=================================================================
   while(binarys.length > 0){
     var data = [];
     
-    (function make_convert_str(str, tbl, format){
+    binarys = (function make_convert_str(str, tbl, format){
       if(tbl.length !== 0){
         if("union" in format){
           //@TODO
-          var union_tbl = tbl;
-          var min_tbl = tbl;
+          var union_tbl = JSON.parse( JSON.stringify( tbl ) );
+          var min_tbl = JSON.parse( JSON.stringify( tbl ) );
           for(var j = 0; j < format.union.length; j++){
-            var temp_tbl = union_tbl;
-            make_convert_str(str, temp_tbl, format.union[j]);
+            var temp_tbl = JSON.parse( JSON.stringify( union_tbl ) );
+            temp_tbl = make_convert_str(str, temp_tbl, format.union[j]);
             if(min_tbl.length > temp_tbl.length){
-              min_tbl = temp_tbl;
+              min_tbl = JSON.parse( JSON.stringify( temp_tbl ) );
             }
           }
-          tbl = min_tbl;
+          tbl = JSON.parse( JSON.stringify( min_tbl ) );
         }else if("label" in format){
           var flg = true;
           for(var k = 0; k < FORMAT_TYPE.length; k++){
@@ -210,10 +220,12 @@ WScript.Echo( "=================================================================
           }
         }else{
           for(var i = 0; i < format.length; i++){
-            make_convert_str(str, tbl, format[i]);
+            tbl = make_convert_str(str, tbl, format[i]);
           }
         }
       }
+      
+      return tbl;
     })(data, binarys, wTrTool.format);
     
     WScript.Echo( JSON.stringify(data) );
