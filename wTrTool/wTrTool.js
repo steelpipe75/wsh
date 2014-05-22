@@ -178,38 +178,40 @@ WScript.Echo( "=================================================================
     var data = [];
     
     (function make_convert_str(str, tbl, format){
-      if("union" in format){
-        //@TODO
-        var union_tbl = tbl;
-        var min_tbl = tbl;
-        for(var j = 0; j < format.union.length; j++){
-          var temp_tbl = union_tbl;
-          make_convert_str(str, temp_tbl, format.union[j]);
-          if(min_tbl.length > temp_tbl.length){
-            min_tbl = temp_tbl;
-          }
-        }
-        tbl = min_tbl;
-      }else if("label" in format){
-        var flg = true;
-        for(var k = 0; k < FORMAT_TYPE.length; k++){
-          if(FORMAT_TYPE[k].type === format.type){
-            var d = [];
-            for(var l = 0; l < FORMAT_TYPE[k].length; l++){
-              d.push(tbl.shift());
+      if(tbl.length !== 0){
+        if("union" in format){
+          //@TODO
+          var union_tbl = tbl;
+          var min_tbl = tbl;
+          for(var j = 0; j < format.union.length; j++){
+            var temp_tbl = union_tbl;
+            make_convert_str(str, temp_tbl, format.union[j]);
+            if(min_tbl.length > temp_tbl.length){
+              min_tbl = temp_tbl;
             }
-            
-            flg = false;
-            str.push(d);
           }
-        }
-        if(flg){
-          WScript.Echo("Error : invalid type");
-          WScript.Quit(-1);
-        }
-      }else{
-        for(var i = 0; i < format.length; i++){
-          make_convert_str(str, tbl, format[i]);
+          tbl = min_tbl;
+        }else if("label" in format){
+          var flg = true;
+          for(var k = 0; k < FORMAT_TYPE.length; k++){
+            if(FORMAT_TYPE[k].type === format.type){
+              var d = [];
+              for(var l = 0; l < FORMAT_TYPE[k].length; l++){
+                d.push(tbl.shift());
+              }
+              
+              flg = false;
+              str.push(d);
+            }
+          }
+          if(flg){
+            WScript.Echo("Error : invalid type");
+            WScript.Quit(-1);
+          }
+        }else{
+          for(var i = 0; i < format.length; i++){
+            make_convert_str(str, tbl, format[i]);
+          }
         }
       }
     })(data, binarys, wTrTool.format);
