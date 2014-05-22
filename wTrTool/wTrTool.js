@@ -148,12 +148,15 @@ var wTrTool = {};
 
 })();
 
-WScript.Echo( JSON.stringify(wTrTool.pattern) );
-WScript.Echo( "========================================================================" );
-WScript.Echo( JSON.stringify(wTrTool.binarys) );
-WScript.Echo( "========================================================================" );
-WScript.Echo( JSON.stringify(wTrTool.format) );
-WScript.Echo( "========================================================================" );
+debugPrint = (function(){
+  WScript.Echo( JSON.stringify(wTrTool.pattern) );
+  WScript.Echo( "========================================================================" );
+  WScript.Echo( JSON.stringify(wTrTool.binarys) );
+  WScript.Echo( "========================================================================" );
+  WScript.Echo( JSON.stringify(wTrTool.format) );
+  WScript.Echo( "========================================================================" );
+});
+// debugPrint();
 
 // output
 (function(){
