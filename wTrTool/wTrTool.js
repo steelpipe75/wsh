@@ -172,6 +172,8 @@ WScript.Echo( "=================================================================
         if("union" in format[i]){
           // WScript.Echo( "union" );
           make_header_str(header, format[i].union);
+        }else if("type" in format[i]){
+          make_header_str(header, format[i]);
         }else{
           for(var j = 0; j < format[i].length; j++){
             make_header_str(header, format[i][j]);
