@@ -1,22 +1,176 @@
+(function f_uint8(data){
+  var num;
+  
+  num = data.shift();
+  
+  return num;
+});
+
+(function f_uint16(data){
+  var num;
+  
+  num = data.shift();
+  num += Math.pow(2, 8) * data.shift();
+  
+  return num;
+});
+
+(function f_uint32(data){
+  var num;
+  
+  num = data.shift();
+  num += Math.pow(2, 8) * data.shift();
+  num += Math.pow(2, 16) * data.shift();
+  num += Math.pow(2, 24) * data.shift();
+  
+  return num;
+});
+
+(function f_sint8(data){
+  var num;
+  
+  num = f_uint8(data);
+  
+  if(num > (Math.pow(2, 7) - 1)){
+    num = num - Math.pow(2, 8);
+  }
+  
+  return num;
+});
+
+(function f_sint16(data){
+  var num;
+  
+  num = f_uint16(data);
+  
+  if(num > (Math.pow(2, 15) - 1)){
+    num = num - Math.pow(2, 16);
+  }
+  
+  return num;
+});
+
+(function f_sint32(data){
+  var num;
+  
+  num = f_uint32(data);
+  
+  if(num > (Math.pow(2, 31) - 1)){
+    num = num - Math.pow(2, 32);
+  }
+  
+  return num;
+});
+
+(function f_hex8(data){
+  var num;
+  
+  num = f_uint8(data);
+  
+  return "0x" + ("00"+ num.toString(16)).slice(-2);
+});
+
+(function f_hex16(data){
+  var num;
+  
+  num = f_uint16(data);
+  
+  return "0x" + ("0000"+ num.toString(16)).slice(-4);
+});
+
+(function f_hex32(data){
+  var num;
+  
+  num = f_uint32(data);
+  
+  return "0x" + ("00000000"+ num.toString(16)).slice(-8);
+});
+
+(function f_bit8(data){
+  var num;
+  
+  num = f_uint8(data);
+  
+  return "b" + num.toString(2);
+});
+
+(function f_bit16(data){
+  var num;
+  
+  num = f_uint16(data);
+  
+  return "b" + num.toString(2);
+});
+
+(function f_bit32(data){
+  var num;
+  
+  num = f_uint32(data);
+  
+  return "b" + num.toString(2);
+});
+
+(function f_oct8(data){
+  var num;
+  
+  num = f_uint8(data);
+  
+  return "0" + num.toString(8);
+});
+
+(function f_oct16(data){
+  var num;
+  
+  num = f_uint16(data);
+  
+  return "0" + num.toString(8);
+});
+
+(function f_oct32(data){
+  var num;
+  
+  num = f_uint32(data);
+  
+  return "0" + num.toString(8);
+});
+
+(function f_dummy8(data){
+  f_uint8(data);
+  
+  return null;
+});
+
+(function f_dummy16(data){
+  f_uint16(data);
+  
+  return null;
+});
+
+(function f_dummy32(data){
+  f_uint32(data);
+  
+  return null;
+});
+
 var FORMAT_TYPE = [
-   { "type" : "UINT8"   , "length" : 1 }
-  ,{ "type" : "UINT16"  , "length" : 2 }
-  ,{ "type" : "UINT32"  , "length" : 4 }
-  ,{ "type" : "SINT8"   , "length" : 1 }
-  ,{ "type" : "SINT16"  , "length" : 2 }
-  ,{ "type" : "SINT32"  , "length" : 4 }
-  ,{ "type" : "BIT8"    , "length" : 1 }
-  ,{ "type" : "BIT16"   , "length" : 2 }
-  ,{ "type" : "BIT32"   , "length" : 4 }
-  ,{ "type" : "OCT8"    , "length" : 1 }
-  ,{ "type" : "OCT16"   , "length" : 2 }
-  ,{ "type" : "OCT32"   , "length" : 4 }
-  ,{ "type" : "HEX8"    , "length" : 1 }
-  ,{ "type" : "HEX16"   , "length" : 2 }
-  ,{ "type" : "HEX32"   , "length" : 4 }
-  ,{ "type" : "DUMMY8"  , "length" : 1 }
-  ,{ "type" : "DUMMY16" , "length" : 2 }
-  ,{ "type" : "DUMMY32" , "length" : 4 }
+   { "type" : "UINT8"   , "size" : 1, "func" : f_uint8   }
+  ,{ "type" : "UINT16"  , "size" : 2, "func" : f_uint16  }
+  ,{ "type" : "UINT32"  , "size" : 4, "func" : f_uint32  }
+  ,{ "type" : "SINT8"   , "size" : 1, "func" : f_sint8   }
+  ,{ "type" : "SINT16"  , "size" : 2, "func" : f_sint16  }
+  ,{ "type" : "SINT32"  , "size" : 4, "func" : f_sint32  }
+  ,{ "type" : "HEX8"    , "size" : 1, "func" : f_hex8    }
+  ,{ "type" : "HEX16"   , "size" : 2, "func" : f_hex16   }
+  ,{ "type" : "HEX32"   , "size" : 4, "func" : f_hex32   }
+  ,{ "type" : "BIT8"    , "size" : 1, "func" : f_bit8    }
+  ,{ "type" : "BIT16"   , "size" : 2, "func" : f_bit16   }
+  ,{ "type" : "BIT32"   , "size" : 4, "func" : f_bit32   }
+  ,{ "type" : "OCT8"    , "size" : 1, "func" : f_oct8    }
+  ,{ "type" : "OCT16"   , "size" : 2, "func" : f_oct16   }
+  ,{ "type" : "OCT32"   , "size" : 4, "func" : f_oct32   }
+  ,{ "type" : "DUMMY8"  , "size" : 1, "func" : f_dummy8  }
+  ,{ "type" : "DUMMY16" , "size" : 2, "func" : f_dummy16 }
+  ,{ "type" : "DUMMY32" , "size" : 4, "func" : f_dummy32 }
 ];
 
 var wTrTool = {};
@@ -210,13 +364,20 @@ debugPrint = (function(){
           var flg = true;
           for(var k = 0; k < FORMAT_TYPE.length; k++){
             if(FORMAT_TYPE[k].type === format.type){
-              var d = [];
-              for(var l = 0; l < FORMAT_TYPE[k].length; l++){
-                d.push(tbl.shift());
-              }
-              
+              var bytes = [];
               flg = false;
-              str.push(d);
+              for(var l = 0; l < FORMAT_TYPE[k].size; l++){
+                if(tbl.length != 0){
+                  bytes.push(tbl.shift());
+                }
+              }
+              if(bytes.length === FORMAT_TYPE[k].size){
+                var ret;
+                ret = FORMAT_TYPE[k].func(bytes);
+                if(ret !== null){
+                  str.push(ret);
+                }
+              }
             }
           }
           if(flg){
