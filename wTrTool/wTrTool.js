@@ -373,6 +373,11 @@ debugPrint = (function(){
                   bytes.push(tbl.shift());
                 }
               }
+              
+              if(wTrTool.option.endian === false){
+                bytes = bytes.reverse();
+              }
+              
               if(bytes.length === FORMAT_TYPE[k].size){
                 var ret;
                 ret = FORMAT_TYPE[k].func(bytes);
