@@ -92,7 +92,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint8(data);
     
-    return "b" + num.toString(2);
+    return "0b" + ("00000000" + num.toString(2)).slice(-8);
   });
   
   (function f_bit16(data){
@@ -100,7 +100,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint16(data);
     
-    return "b" + num.toString(2);
+    return "0b" + ("0000000000000000" + num.toString(2)).slice(-16);
   });
   
   (function f_bit32(data){
@@ -108,7 +108,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint32(data);
     
-    return "b" + num.toString(2);
+    return "0b" + ("00000000000000000000000000000000" + num.toString(2)).slice(-32);
   });
   
   (function f_oct8(data){
@@ -116,7 +116,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint8(data);
     
-    return "0" + num.toString(8);
+    return "0" + ("000" + num.toString(8)).slice(-3);
   });
   
   (function f_oct16(data){
@@ -124,7 +124,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint16(data);
     
-    return "0" + num.toString(8);
+    return "0" + ("000000" + num.toString(8)).slice(-6);
   });
   
   (function f_oct32(data){
@@ -132,7 +132,7 @@ var FORMAT_TYPE = (function(){
     
     num = f_uint32(data);
     
-    return "0" + num.toString(8);
+    return "0" + ("00000000000" + num.toString(8)).slice(-11);
   });
   
   (function f_dummy8(data){
