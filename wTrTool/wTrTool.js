@@ -351,7 +351,6 @@ debugPrint = (function(){
     binarys = (function make_convert_str(str, tbl, format){
       if(tbl.length !== 0){
         if("union" in format){
-          //@TODO
           var union_tbl = JSON.parse( JSON.stringify( tbl ) );
           var min_tbl = JSON.parse( JSON.stringify( tbl ) );
           for(var j = 0; j < format.union.length; j++){
