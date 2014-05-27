@@ -209,6 +209,11 @@ var wTrTool = {};
   wTrTool.option = opt;
 })();
 
+WScript.Echo("inputfile\t= \""    + wTrTool.option.input    + "\"");
+WScript.Echo("outputfile\t= \""   + wTrTool.option.output   + "\"");
+WScript.Echo("formatfile\t= \""   + wTrTool.option.format   + "\"");
+WScript.Echo("patternname\t= \""  + wTrTool.option.pattern  + "\"");
+
 // pattern select
 (function(){
 
@@ -216,6 +221,7 @@ var wTrTool = {};
 
   var format_stream = objFS.OpenTextFile(wTrTool.option.format, 1, false, -2);
   var format_txt = format_stream.ReadAll();
+  format_stream.Close();
   var formats = JSON.parse(format_txt);
   var pattern = null;
 
@@ -314,8 +320,9 @@ debugPrint = (function(){
 });
 // debugPrint();
 
-// output
+// data convert
 (function(){
+  var output = [];
   var top = [];
   var binarys = wTrTool.binarys;
 
@@ -342,8 +349,10 @@ debugPrint = (function(){
     }
   })(top, wTrTool.format);
 
-  WScript.Echo( JSON.stringify(top) );
-  WScript.Echo( "------------------------------------------------------------------------" );
+  // WScript.Echo( JSON.stringify(top) );
+  // WScript.Echo( "------------------------------------------------------------------------" );
+
+  output.push( top );
 
   while(binarys.length > 0){
     var data = [];
@@ -388,6 +397,7 @@ debugPrint = (function(){
           }
           if(flg){
             WScript.Echo("Error : invalid type");
+            WScript.Echo( format.type );
             WScript.Quit(-1);
           }
         }else{
@@ -400,8 +410,21 @@ debugPrint = (function(){
       return tbl;
     })(data, binarys, wTrTool.format);
     
-    WScript.Echo( JSON.stringify(data) );
+    // WScript.Echo( JSON.stringify(data) );
+    output.push( data );
   }
 
+  wTrTool.output = output;
 })();
 
+// output
+(function(){
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
+
+  var output_stream = objFS.CreateTextFile(wTrTool.option.output);
+
+  for(var i = 0; i < wTrTool.output.length; i++){
+    output_stream.WriteLine( wTrTool.output[i].join(",") );
+  }
+  output_stream.Close();
+})();
