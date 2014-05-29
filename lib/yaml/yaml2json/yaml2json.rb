@@ -4,17 +4,18 @@ require 'pp'
 require 'json'
 require 'yaml'
 
-unless (ARGV.size == 2) || (ARGV.size == 3 && ARGV[2] == "tab") then
-  puts "Usage: yaml2json in_file out_file [tab]"
+unless (ARGV.size == 2) || (ARGV.size == 3 && ARGV[2].index("tab:") == 0) then
+  puts "Usage: yaml2json in_file out_file [tab:n]"
   exit 1
 end
 
 txt = File.read(ARGV[0])
-if ARGV[2] == "tab" then
+if ARGV[2].index("tab:") == 0 then
+  num = ARGV[2][4..ARGV[2].length].to_i
   yaml = ""
   txt.each_line do |line|
     while /\t+/ =~ line
-      n = $&.size * 2 - $`.size % 2
+      n = $&.size * num - $`.size % num
       line.sub!(/\t+/, " " * n)
     end
     yaml << line
