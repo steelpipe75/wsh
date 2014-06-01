@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<package>
+  <job>
+    <!-- VVV ライブラリ VVV -->
+    <script language = "JScript" src = "../../lib/wsh_force_cscript/wsh_force_cscript.js"></script>
+    <script language = "JScript" src = "../../lib/json/JSON-js/json2.js"></script>
+    <script language = "JScript" src = "../../lib/binary/wsh_binary.js"></script>
+    <script language = "JScript">var bin2txt_exe_path = "..\\..\\lib\\binary\\bin2txt\\bin2txt.exe";</script>
+    <script language = "JScript">var txt2bin_exe_path = "..\\..\\lib\\binary\\txt2bin\\txt2bin.exe";</script>
+    <script language = "JScript" src = "../../lib/underscore/1.5.0/underscore-min.js"></script>
+    <!-- AAA ライブラリ AAA -->
+
+    <script language = "JScript" src = "binary.js"></script>
+  </job>
+</package>

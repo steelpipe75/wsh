@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	FILE *in_file;
 	FILE *out_file;
 	
-	char ch;
+	unsigned char ch;
 	int count;
 		
 	if(argc != 3){
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	
 	count = 0;
 	
-	while(fread(&ch, sizeof(char), 1, in_file) != 0){
+	while(fread(&ch, sizeof(ch), 1, in_file) != 0){
 		count++;
 		fprintf(out_file, "%02X", ch);
 		if(count < 16){
