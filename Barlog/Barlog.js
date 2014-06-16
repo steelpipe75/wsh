@@ -1,5 +1,7 @@
 var Barlog = {};
 
+var delimiter = ",";
+
 // command line argument
 (function(){
   var opt = {};
@@ -16,7 +18,7 @@ var Barlog = {};
 
   var options = [
                 /* key,     default_value */
-                ["input",   "input.dat"]
+                ["input",   "input.csv"]
               , ["output",  "output.csv"]
               , ["convert", "convert.json"]
             ];
@@ -34,3 +36,63 @@ WScript.Echo("inputfile\t= \""    + Barlog.option.input   + "\"");
 WScript.Echo("outputfile\t= \""   + Barlog.option.output  + "\"");
 WScript.Echo("convertfile\t= \""  + Barlog.option.convert + "\"");
 
+// input => object array
+var objArray = (function(){
+
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
+  var input_stream = objFS.OpenTextFile(Barlog.option.input, 1, false, -2);
+  var input_txt = input_stream.ReadAll();
+  input_stream.Close();
+
+//  WScript.Echo( input_txt );
+
+  var input_txt_array = input_txt.split("\r\n");
+  var input = [];
+
+  if(input_txt_array.length >= 1){
+    header = input_txt_array[0].split(delimiter);
+    
+//    WScript.Echo( JSON.stringify(header) );
+    
+    for(var i = 1; i < input_txt_array.length; i++){
+      if(input_txt_array[i] !== ""){
+        var obj = {};
+        
+        for(var j = 0; j < header.length; j++){
+          obj[header[j]] = (input_txt_array[i].split(delimiter))[j];
+        }
+        
+        input.push(obj);
+      }
+    }
+  }
+
+//  WScript.Echo( JSON.stringify(input) );
+
+  return input;
+})();
+
+// object array => output
+var outdata = (function(obj){
+  var output = []
+  var head = [];
+  for(var i in obj[0]){
+    head.push( i );
+  }
+  output.push ( head.join(delimiter) );
+  
+  for(var j = 0; j < obj.length; j++){
+    var data = [];
+    for(var k = 0; k < head.length; k++){
+      data.push(obj[j][head[k]]);
+    }
+    output.push ( data.join(delimiter) );
+  }
+
+//  WScript.Echo( output.join("\r\n") );
+
+  return output.join("\r\n");
+})(objArray);
+
+WScript.Echo( "========================================================" );
+WScript.Echo( outdata );
