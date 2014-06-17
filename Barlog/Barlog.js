@@ -94,5 +94,10 @@ var outdata = (function(obj){
   return output.join("\r\n");
 })(objArray);
 
-WScript.Echo( "========================================================" );
-WScript.Echo( outdata );
+(function(output){
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
+  var output_stream = objFS.CreateTextFile(Barlog.option.output);
+  output_stream.Write( output + "\r\n" );
+  output_stream.Close();
+})(outdata);
+
