@@ -36,16 +36,21 @@ WScript.Echo("inputfile\t= \""    + Barlog.option.input   + "\"");
 WScript.Echo("outputfile\t= \""   + Barlog.option.output  + "\"");
 WScript.Echo("convertfile\t= \""  + Barlog.option.convert + "\"");
 
-// input => object array
-var objArray = (function(){
-
+// file => input
+var inputdata = (function(){
   var objFS = new ActiveXObject("Scripting.FileSystemObject");
   var input_stream = objFS.OpenTextFile(Barlog.option.input, 1, false, -2);
-  var input_txt = input_stream.ReadAll();
+  var input = input_stream.ReadAll();
   input_stream.Close();
 
-//  WScript.Echo( input_txt );
+//  WScript.Echo( input );
 
+  return input;
+})();
+
+
+// input => object array
+var objArray = (function(input_txt){
   var input_txt_array = input_txt.split("\r\n");
   var input = [];
 
@@ -70,10 +75,10 @@ var objArray = (function(){
 //  WScript.Echo( JSON.stringify(input) );
 
   return input;
-})();
+})(inputdata);
 
 // object array => output
-var outdata = (function(obj){
+var outputdata = (function(obj){
   var output = []
   var head = [];
   for(var i in obj[0]){
@@ -94,10 +99,11 @@ var outdata = (function(obj){
   return output.join("\r\n");
 })(objArray);
 
+// output => file
 (function(output){
   var objFS = new ActiveXObject("Scripting.FileSystemObject");
   var output_stream = objFS.CreateTextFile(Barlog.option.output);
   output_stream.Write( output + "\r\n" );
   output_stream.Close();
-})(outdata);
+})(outputdata);
 
