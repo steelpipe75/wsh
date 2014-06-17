@@ -1,3 +1,5 @@
+var delimiter = ",";
+
 var FORMAT_TYPE = (function(){
   (function f_uint8(data){
     var num;
@@ -424,7 +426,7 @@ debugPrint = (function(){
   var output_stream = objFS.CreateTextFile(wTrTool.option.output);
 
   for(var i = 0; i < wTrTool.output.length; i++){
-    output_stream.WriteLine( wTrTool.output[i].join(",") );
+    output_stream.WriteLine( wTrTool.output[i].join(delimiter) );
   }
   output_stream.Close();
 })();
