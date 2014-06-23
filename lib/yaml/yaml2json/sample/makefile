@@ -1,10 +1,10 @@
-CAT = cat
+CAT = type
 Y2J = ../yaml2json.exe
-YAML_SRCS = test.yaml.1 test.yaml.2 test.yaml.3
+YAML_SRCS = test1.yaml test2.yaml test3.yaml
 
 test.json: test.yaml
-	$(Y2J) $< $@
+	$(Y2J) $** $@
 
 test.yaml: $(YAML_SRCS)
-	$(CAT) $^ >$@
+	$(CAT) $** >$@
 
