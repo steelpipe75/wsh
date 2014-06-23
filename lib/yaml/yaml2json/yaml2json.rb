@@ -10,7 +10,7 @@ unless (ARGV.size == 2) || (ARGV.size == 3 && ARGV[2].index("tab:") == 0) then
 end
 
 txt = File.read(ARGV[0])
-if ARGV[2].index("tab:") == 0 then
+if (ARGV.size == 3 && ARGV[2].index("tab:") == 0) then
   num = ARGV[2][4..ARGV[2].length].to_i
   yaml = ""
   txt.each_line do |line|
