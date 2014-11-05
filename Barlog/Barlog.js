@@ -44,7 +44,6 @@ var inputdata = (function(){
   return input;
 })();
 
-
 // input => object array
 var objArray = (function(input_txt){
   var input_txt_array = input_txt.split("\r\n");
@@ -69,6 +68,22 @@ var objArray = (function(input_txt){
   return input;
 })(inputdata);
 
+// file => objConvert
+var objConvert = (function(){
+  var objFS = new ActiveXObject("Scripting.FileSystemObject");
+  var convert_stream = objFS.OpenTextFile(Barlog.option.convert, 1, false, -2);
+  var convert_str = convert_stream.ReadAll();
+  convert_stream.Close();
+
+  convert_obj = eval( "(" + convert_str + ")" );
+
+  return convert_obj;
+})();
+
+var modify_objArray = (function(oA, oC){
+  return oA;
+})(objArray, objConvert);
+
 // object array => output
 var outputdata = (function(obj){
   var output = []
@@ -87,7 +102,7 @@ var outputdata = (function(obj){
   }
 
   return output.join("\r\n");
-})(objArray);
+})(modify_objArray);
 
 // output => file
 (function(output){
