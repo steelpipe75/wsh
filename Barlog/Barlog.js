@@ -27,8 +27,6 @@ var delimiter = ",";
     opt[options[i][0]] = optGet(objArgs, options[i][0], options[i][1]);
   }
 
-//  WScript.Echo( "opt = " + JSON.stringify(opt) );
-
   Barlog.option = opt;
 })();
 
@@ -43,8 +41,6 @@ var inputdata = (function(){
   var input = input_stream.ReadAll();
   input_stream.Close();
 
-//  WScript.Echo( input );
-
   return input;
 })();
 
@@ -56,8 +52,6 @@ var objArray = (function(input_txt){
 
   if(input_txt_array.length >= 1){
     header = input_txt_array[0].split(delimiter);
-    
-//    WScript.Echo( JSON.stringify(header) );
     
     for(var i = 1; i < input_txt_array.length; i++){
       if(input_txt_array[i] !== ""){
@@ -71,8 +65,6 @@ var objArray = (function(input_txt){
       }
     }
   }
-
-//  WScript.Echo( JSON.stringify(input) );
 
   return input;
 })(inputdata);
@@ -93,8 +85,6 @@ var outputdata = (function(obj){
     }
     output.push ( data.join(delimiter) );
   }
-
-//  WScript.Echo( output.join("\r\n") );
 
   return output.join("\r\n");
 })(objArray);
