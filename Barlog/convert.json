@@ -1,1 +1,69 @@
-[]
+[
+  {
+    "job": "sort",
+    "key": "d",
+    "param": "descending"
+  },
+  {
+    "job": "script",
+    "key": "e",
+    "param": [
+      "<%= param[row[\"a\"]] %>",
+      [
+        "x",
+        "y",
+        "z"
+      ]
+    ]
+  },
+  {
+    "job": "script",
+    "key": "c",
+    "param": [
+      "<%= val * 10 %>"
+    ]
+  },
+  {
+    "job": "script",
+    "key": "b",
+    "param": [
+      "<%= val / 10 %>"
+    ]
+  },
+  {
+    "job": "hash",
+    "key": "a",
+    "cond": "<%= (row[\"b\"] == 10) %>",
+    "param": {
+      "1": "A",
+      "2": "B",
+      "3": "C"
+    }
+  },
+  {
+    "job": "hash",
+    "key": "b",
+    "param": {
+      "10": "AA",
+      "20": "BB",
+      "30": "CC"
+    }
+  },
+  {
+    "job": "hash",
+    "key": "c",
+    "param": {
+      "100": "AAA",
+      "200": "BBB",
+      "300": "CCC"
+    }
+  },
+  {
+    "job": "column_sort",
+    "key": "dumy",
+    "param": [
+      "e",
+      "c"
+    ]
+  }
+]

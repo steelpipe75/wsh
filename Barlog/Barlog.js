@@ -81,6 +81,37 @@ var objConvert = (function(){
 })();
 
 var modify_objArray = (function(oA, oC){
+  function f_sort(A,P){
+    return A;
+  }
+  
+  function f_column_sort(A,P){
+    return A;
+  }
+  
+  function f_hash(A,P){
+    return A;
+  }
+  
+  function f_script(A,P){
+    return A;
+  }
+  
+  funcObj = {
+     "sort": f_sort
+    ,"column_sort": f_column_sort
+    ,"hash": f_hash
+    ,"script": f_script
+  };
+  
+  while(oC.length){
+    var ptn = oC.shift();
+    WScript.Echo("length = " + oC.length);
+    WScript.Echo("job = " + ptn.job);
+    
+    oA = funcObj[ptn.job](oA, ptn);
+  }
+  
   return oA;
 })(objArray, objConvert);
 
