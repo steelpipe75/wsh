@@ -90,16 +90,19 @@ s = (function(InputStr){
 
 s = (function(InputArray){
   var OutputArray = [];
-  while(InputArray.length > 0){
-    var obj = InputArray.shift();
-    try{
-      var ret = eval(obj.Identifier + "=" + obj.TokenString + ";");
-      obj.Value = ret;
-      OutputArray.push(obj);
-    }catch(e){
-      InputArray.push(obj);
+  var temp = {};
+  with(temp){
+    while(InputArray.length > 0){
+      var obj = InputArray.shift();
+      try{
+        var ret = eval("temp." + obj.Identifier + "=" + obj.TokenString + ";");
+        obj.Value = ret;
+        OutputArray.push(obj);
+      }catch(e){
+        InputArray.push(obj);
+      }
+      WScript.echo( obj.Identifier + ",\t"+ ret );
     }
-    WScript.echo( obj.Identifier + ",\t"+ ret );
   }
   if(1){
     var max = OutputArray.length;
@@ -111,5 +114,3 @@ s = (function(InputArray){
   }
   return InputArray;
 })(s);
-
-WScript.echo( TEST_A ); // ƒOƒ[ƒoƒ‹‰˜õ
