@@ -69,4 +69,47 @@ s = (function(InputStr){
   return OutputArray.join("\r\n");
 })(s);
 
-WScript.echo(s);
+// WScript.echo(s);
+
+s = (function(InputStr){
+  var re = /\s/;
+  var OutputArray = [];
+  var InputArray = InputStr.split("\r\n");
+  var max = InputArray.length;
+  for(var i = 0; i < max; i++){
+    var obj = {};
+    var idx = InputArray[i].search(re);
+    obj.Identifier = InputArray[i].substr(0,idx);
+    obj.TokenString = InputArray[i].substr(idx+1);
+    // WScript.echo( "Identifier = \"" + obj.Identifier + "\"" );
+    // WScript.echo( "TokenString = \"" + obj.TokenString + "\"" );
+    OutputArray.push( obj );
+  }
+  return OutputArray;
+})(s);
+
+s = (function(InputArray){
+  var OutputArray = [];
+  while(InputArray.length > 0){
+    var obj = InputArray.shift();
+    try{
+      var ret = eval(obj.Identifier + "=" + obj.TokenString + ";");
+      obj.Value = ret;
+      OutputArray.push(obj);
+    }catch(e){
+      InputArray.push(obj);
+    }
+    WScript.echo( obj.Identifier + ",\t"+ ret );
+  }
+  if(1){
+    var max = OutputArray.length;
+    for(var i = 0; i < max; i++){
+      WScript.echo( "Identifier = \"" + OutputArray[i].Identifier + "\"" );
+      WScript.echo( "TokenString = \"" + OutputArray[i].TokenString + "\"" );
+      WScript.echo( "Value = \"" + OutputArray[i].Value + "\"" );
+    }
+  }
+  return InputArray;
+})(s);
+
+WScript.echo( TEST_A ); // ƒOƒ[ƒoƒ‹‰˜õ
