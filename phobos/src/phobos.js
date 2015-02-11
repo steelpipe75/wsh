@@ -4,8 +4,8 @@ var s = "";
 // 期待した数のコマンドライン引数がなければ異常終了
 (function(){
   if(WScript.arguments.length !== 1){
-    WScript.echo("Command Line Argument Error");
-    WScript.exit(1);
+    WScript.Echo("Command Line Argument Error");
+    WScript.Quit(1);
   }
 })();
 
@@ -16,13 +16,13 @@ s = (function(filename){
   var InputStream = fso.OpenTextFile(filename);
   if(InputStream.AtEndOfStream === false){
     str = InputStream.ReadAll();
-    // WScript.echo(str);
+    // WScript.Echo(str);
   }
   InputStream.Close();
   return str;
 })(WScript.arguments.Item(0));
 
-// WScript.echo(s);
+// WScript.Echo(s);
 
 // 第一引数で指定された文字列から、
 // 第二引数、第三引数で囲われた行を抽出して、戻り値で返す。
@@ -53,7 +53,7 @@ s = (function(InputStr,StartStr,EndStr){
   return OutputArray.join("\r\n");
 })(s,"StartComment","EndComment");
 
-// WScript.echo(s);
+// WScript.Echo(s);
 
 // マクロ定義の記述された行から、マクロ定義のみを抽出
 s = (function(InputStr){
@@ -69,7 +69,7 @@ s = (function(InputStr){
   return OutputArray.join("\r\n");
 })(s);
 
-// WScript.echo(s);
+// WScript.Echo(s);
 
 s = (function(InputStr){
   var re = /\s/;
@@ -81,8 +81,8 @@ s = (function(InputStr){
     var idx = InputArray[i].search(re);
     obj.Identifier = InputArray[i].substr(0,idx);
     obj.TokenString = InputArray[i].substr(idx+1);
-    // WScript.echo( "Identifier = \"" + obj.Identifier + "\"" );
-    // WScript.echo( "TokenString = \"" + obj.TokenString + "\"" );
+    // WScript.Echo( "Identifier = \"" + obj.Identifier + "\"" );
+    // WScript.Echo( "TokenString = \"" + obj.TokenString + "\"" );
     OutputArray.push( obj );
   }
   return OutputArray;
@@ -90,27 +90,65 @@ s = (function(InputStr){
 
 s = (function(InputArray){
   var OutputArray = [];
-  var temp = {};
-  with(temp){
-    while(InputArray.length > 0){
-      var obj = InputArray.shift();
-      try{
-        var ret = eval("temp." + obj.Identifier + "=" + obj.TokenString + ";");
-        obj.Value = ret;
-        OutputArray.push(obj);
-      }catch(e){
-        InputArray.push(obj);
+  var InputLength = InputArray.length;
+  var TempObj = {};
+  with(TempObj){
+    var TempArray = [];
+    do{
+      TempArray = [];
+      while(InputArray.length > 0){
+        var obj = InputArray.shift();
+        try{
+          var ret = eval("TempObj." + obj.Identifier + "=" + obj.TokenString + ";");
+          obj.Value = ret;
+          OutputArray.push(obj);
+        }catch(e){
+          TempArray.push(obj);
+        }
+        // WScript.Echo( obj.Identifier + ",\t"+ ret );
+        // WScript.Echo(InputLength + ", " + TempArray.length);
       }
-      WScript.echo( obj.Identifier + ",\t"+ ret );
-    }
+      
+      if(InputLength > TempArray.length){
+        InputArray = TempArray;
+        InputLength = TempArray.length
+      }else{
+        // WScript.Echo( TempArray[0].Identifier );
+        WScript.Echo("Error");
+        WScript.Quit(1);
+      }
+    }while(TempArray.length > 0);
   }
-  if(1){
+  if(0){
+    WScript.Echo( OutputArray.length );
     var max = OutputArray.length;
     for(var i = 0; i < max; i++){
-      WScript.echo( "Identifier = \"" + OutputArray[i].Identifier + "\"" );
-      WScript.echo( "TokenString = \"" + OutputArray[i].TokenString + "\"" );
-      WScript.echo( "Value = \"" + OutputArray[i].Value + "\"" );
+      WScript.Echo( "Identifier = \"" + OutputArray[i].Identifier + "\"" );
+      WScript.Echo( "TokenString = \"" + OutputArray[i].TokenString + "\"" );
+      WScript.Echo( "Value = \"" + OutputArray[i].Value + "\"" );
     }
   }
-  return InputArray;
+  return OutputArray;
+})(s);
+
+s = (function(InputArray){
+  var OutputObj = {};
+  var max = InputArray.length;
+  for(var i = 0; i < max; i++){
+    var t = OutputObj[ InputArray[i].Value ];
+    if(t === void 0){
+      OutputObj[ InputArray[i].Value ] = InputArray[i].Identifier;
+    }else{
+      OutputObj[ InputArray[i].Value ] += ";" + InputArray[i].Identifier;
+    }
+  }
+  return OutputObj;
+})(s);
+
+(function(InputObj){
+  if(1){
+    for(var a in InputObj){
+      WScript.Echo( a + ": \"" + InputObj[a] + "\"" );
+    }
+  }
 })(s);
