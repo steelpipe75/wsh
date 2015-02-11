@@ -4,8 +4,8 @@
 #define TEST_A_B_A TEST_A + TEST_B + 11
 #define TEST_A_C_A TEST_A + TEST_C + 11
 
-#define TEST_A 11
-#define TEST_B 0xC
+#define TEST_A 11		/* test */
+#define TEST_B 0xC		// test
 #define TEST_C 071
 
 #define TEST_A_A TEST_A + 11

@@ -99,7 +99,7 @@ s = (function(InputArray){
       while(InputArray.length > 0){
         var obj = InputArray.shift();
         try{
-          var ret = eval("TempObj." + obj.Identifier + "=" + obj.TokenString + ";");
+          var ret = eval("TempObj." + obj.Identifier + "=" + obj.TokenString);
           obj.Value = ret;
           OutputArray.push(obj);
         }catch(e){
