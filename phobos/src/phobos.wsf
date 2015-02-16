@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="Shift-JIS"?>
+
+<package>
+  <job>
+    <runtime>
+      <named
+        name="input"
+        helpstring="入力ファイル名"
+        type="string"
+        required="true"
+      />
+    </runtime>
+    <!-- VVV ライブラリ VVV -->
+    <script language = "JScript" src = "../../lib/wsh_force_cscript/wsh_force_cscript.js"></script>
+    <script language = "JScript" src = "../../lib/json/JSON-js/json2.js"></script>
+    <!-- AAA ライブラリ AAA -->
+
+    <script language = "JScript" src = "phobos.js"></script>
+
+    <script language = "JScript">
+      WScript.echo( JSON.stringify(s, null, "  ") );
+    </script>
+  </job>
+</package>

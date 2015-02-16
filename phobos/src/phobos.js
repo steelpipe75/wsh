@@ -146,9 +146,11 @@ s = (function(InputArray){
 })(s);
 
 (function(InputObj){
-  if(1){
+  if(0){
     for(var a in InputObj){
       WScript.Echo( a + ": \"" + InputObj[a] + "\"" );
     }
   }
 })(s);
+
+
